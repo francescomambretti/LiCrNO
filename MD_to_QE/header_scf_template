@@ -1,0 +1,47 @@
+&CONTROL
+  calculation = 'scf'
+  outdir = './tmp/'
+  prefix = 'pwscf'
+  pseudo_dir = '/leonardo/home/userexternal/fmambret/PSEUDOPOTENTIALS'
+  tprnfor = .true.
+  tstress = .true.
+  verbosity = 'high'
+  disk_io='low'
+/
+
+&SYSTEM
+  degauss = 1.4699723600d-02
+  ecutrho     = 540
+  ecutwfc     = 90
+  ibrav       = 0
+  nat= $NATOMS  !number of atoms
+  ntyp=5
+  occupations = "smearing"
+  smearing = 'gaussian'
+  tot_charge = 0
+/
+
+&ELECTRONS
+  diagonalization = 'david'
+  conv_thr         =  1.00000e-07
+  electron_maxstep =  100
+  mixing_beta =   2.0000000000d-01
+  startingpot      = "atomic"
+  startingwfc      = "atomic+random"
+/
+
+ATOMIC_SPECIES
+Li   6.94100 li_pbe_v1.4.uspp.F.UPF
+Cr 51.9961 cr_pbe_v1.5.uspp.F.UPF
+N   14.00674 N.pbe-n-radius_5.UPF
+O 15.9994 O.pbe-n-kjpaw_psl.0.1.UPF
+H 1.00794 H.pbe-rrkjus_psl.1.0.0.UPF
+
+K_POINTS {gamma}
+
+CELL_PARAMETERS {angstrom}
+17.111041116 0.0 0.0
+-5.703680372 9.879064196 0.0
+0.0 0.0 45.1553882112
+
+ATOMIC_POSITIONS {angstrom}
