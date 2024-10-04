@@ -1,4 +1,4 @@
-# Functions to read and write xyz 
+# Functions to read and write xyz
 # used by Jupyter Notebooks
 # N.B.: these functions may be improved with ASE
 
@@ -16,7 +16,7 @@ def subs_head (natoms):
     f.write(s)
     f.close()
     
-    return 
+    return
 
 ##################################################################################
 def read_xyz(filename, skiprows, countermax):
@@ -36,8 +36,8 @@ def read_xyz(filename, skiprows, countermax):
     with open(filename, 'r') as f:
         for _ in range(skiprows):
             next(f)
-        if(count< countermax):
-            for line in f:
+        for line in f:
+            if (count < countermax):
                 try:
                     natm = int(line)  # Read number of atoms
                     next(f)     # Skip over comments
@@ -46,39 +46,39 @@ def read_xyz(filename, skiprows, countermax):
                     for i in range(natm):
                         line = next(f).split()
                         atom_names.append(line[0])
-                        xyz.append(
-                            [float(line[1]), float(line[2]), float(line[3])])
+                        xyz.append([float(line[1]), float(line[2]), float(line[3])])
                     coords.append(xyz)
                     count+=1
+                    print(count)
                 except (TypeError, IOError, IndexError, StopIteration):
                     raise ValueError('Incorrect XYZ file format')
         else:
-            return atom_names, coords 
+            return atom_names, coords
         
         print('End reading ',filename)
 
     return atom_names, coords
 
 ##################################################################################
-def write_xyz(filename, atoms, coords): 
+def write_xyz(filename, atoms, coords):
     """Write atom names and coordinate data to XYZ file
 
     Args:
         filename:   Name of xyz data file
         atoms:      Iterable of atom names
         coords:     Coordinates, must be of shape nimages*natoms*3
-    """ 
+    """
     natoms = len(atoms)
     with open(filename, 'w') as f:
         for i, X in enumerate(np.atleast_3d(coords)):
             f.write("%d\n" % natoms)
             f.write("Frame %d\n" % i)
-            for a, Xa in zip(atoms, X): 
-                f.write(" {:3} {:21.12f} {:21.12f} {:21.12f}\n".format(a, *Xa)) 
+            for a, Xa in zip(atoms, X):
+                f.write(" {:3} {:21.12f} {:21.12f} {:21.12f}\n".format(a, *Xa))
 
     return
 
-##################################################################################         
+##################################################################################
 def is_in_range (value, min_int, max_int):
     if value >= min_int and max_int> value:
         return True
@@ -141,7 +141,7 @@ def sel_conf (MF,lenMF,intervals,N_samples_int,out_path,devi,coords,atoms,t):
         for idx in selected_geom_int:
             devi_sel.append(MF[idx]) #keep track of max force deviations of the chosen subset
 
-        #write output 
+        #write output
         print('Writing output resume')
         with open("output.log", 'w') as f:
             f.write("#Selected Frames "+str(k)+" interval:\n")
@@ -187,7 +187,7 @@ def sel_conf_CV (MF,lenMF,intervals,N_samples_int,out_path,devi,coords,atoms,t,c
             devi_sel.append(MF[idx]) #keep track of max force deviations of the chosen subset
             cv_sel.append(cv[idx])
 
-        #write output 
+        #write output
         print('Writing output resume')
         with open("output.log", 'w') as f:
             f.write("#Selected Frames "+str(k)+" interval:\n")
@@ -242,7 +242,7 @@ def sel_conf_CV_no_int (lenCV,out_path,coords,atoms,t,cv,min_CV,max_CV,Nsamples)
 
 
 ##################################################################################
-def sel_conf_flooding(N_samples,out_path,devi,coords,atoms,t):
+def sel_conf_flooding(out_path,coords,atoms,t):
 
     file_geom = out_path+"/run_{}/".format(str(t))+'/geom_sel.xyz' #set output file name
 
@@ -257,14 +257,14 @@ def sel_conf_flooding(N_samples,out_path,devi,coords,atoms,t):
 ##################################################################################
 
 def split_xyz(min_id,max_id,out_path,lines_per_split,filename_geom):
-    # Loop over replicas  
+    # Loop over replicas
     for t in range (min_id,max_id+1):
         path = out_path+"/run_{}/".format(str(t))
         myfile=path+filename_geom
         command="split -l "+str(lines_per_split)+" --numeric-suffixes=1 --suffix-length=4 --additional-suffix=\".xyz\" "+myfile+" "+path+"/frame"
-        os.system(command)  
+        os.system(command)
 
-    return  
+    return
 
 ##################################################################################
 def create_QE_inp(min_id,max_id,out_path):
@@ -295,9 +295,9 @@ def create_subfold (N,min_id,max_id,out_path):
             try:
                 os.makedirs(path+"/QE_group_"+str(idx))
             except: #folder already exists
-                pass 
+                pass
             for l in range (0,N): #split QE input files across subfolders
-                loc_idx=N*k+l 
+                loc_idx=N*k+l
                 try:
                     os.system("cp "+path+"/inputs_QE/input_"+str(loc_idx)+".inp "+path+"/QE_group_"+str(idx))
                 except:
