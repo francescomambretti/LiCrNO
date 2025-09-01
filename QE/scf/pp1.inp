@@ -1,0 +1,12 @@
+&inputPP
+   prefix         =  'pwscf'
+   outdir         =  'tmp'
+   plot_num       =  0
+   filplot        =  'MO'
+/
+&plot
+   nfile          =  1
+   output_format  =  6
+   iflag          =  3
+   fileout        =  'density_val.cube'
+/ 
